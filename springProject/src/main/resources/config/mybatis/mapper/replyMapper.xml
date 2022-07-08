@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.ReplyMapper">
+	
+	<!-- 댓글조회 -->
+<select id="reply_lsit" parameterType="int" resultType="vo.ReplyVO" >
+	select * from reviewb_reply where idx = #{idx} order by reidx desc
+</select>
+
+<!-- 댓글작성 -->
+<insert id="reply_insert" parameterType="vo.ReplyVO">
+	insert into reviewb_reply values(seq_reviewb_reply.nextval, #{idx} , #{content}, sysdate, #{writer})
+</insert>
+
+<!-- 댓글 수정 -->
+<update id="reply_modify" parameterType="vo.ReplyVO">
+	update reviewb_reply set content = #{content},
+							where reidx = #{reidx}
+								and idx = #{idx}
+</update>
+<!-- 댓글 삭제 -->
+<delete id="reply_delete" parameterType="vo.ReplyVO">
+	delete from reviewb_reply where reidx = #{reidx}
+</delete>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

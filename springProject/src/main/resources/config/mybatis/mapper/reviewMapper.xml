@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.ReviewMapper">
+	
+	<!-- 전체글조회 -->
+<!-- <select id="list" resultType="vo.ReviewVO">
+	select * from reviewb order by idx desc
+</select> -->
+
+	<!-- 글 추가하기 -->
+<insert id="insert" parameterType="vo.ReviewVO">
+	insert into reviewb values(seq_reviewb.nextVal, #{title}, #{content},#{userNick}, sysdate , #{star} , 0 )
+</insert>
+	<!-- 수정하기 위해서 특정글 조회 -->
+<select id="list_one" parameterType="int" resultType="vo.ReviewVO">
+	select * from reviewb where idx = #{idx}
+</select>
+	<!-- 수정하기 -->
+<update id="update_modi" parameterType="vo.ReviewVO">
+	update reviewb set title = #{title},
+						content = #{content},
+						regdate = sysdate,
+						star = #{star}
+						where idx = #{idx}
+						
+</update>
+
+<!-- 게시글 삭제 -->
+	<delete id="delet" parameterType="vo.ReviewVO">
+		delete from reviewb where idx = #{idx} 
+	</delete>
+	
+<!-- 페이지별 게시물 조회 -->	
+	<select id="count" resultType="vo.ReviewVO" parameterType="java.util.HashMap" >
+		select * from (select 
+						rank() over(order by idx desc)no,
+						r.*from reviewb r)
+						where no between #{start} and #{end}
+	</select>
+	
+	<!-- 전체 게시물 개수 조회 -->
+	<select id="count_list" resultType="int">
+		select count(*) from reviewb
+	</select>
+
+
+   <select id="count_search" resultType="vo.ReviewVO" parameterType="vo.ReviewVO">
+		select * from reviewb where title like '%' || #{keyword} || '%'
+	</select>
+	
+	<!-- 조회수 -->
+	<update id="update">
+		update reviewb set viewcount = viewcount +1 where idx = #{idx}
+	</update>
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

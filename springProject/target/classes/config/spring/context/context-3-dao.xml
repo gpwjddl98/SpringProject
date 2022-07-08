@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	<!-- <context:component-scan base-package="com.korea.mybatis"/> -->
+	
+	<!-- 서비스 객체 자동생성 -->
+	<context:component-scan base-package="com.project.service"/>	
+	
+	<!-- 메일링 빈 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    	<property name="host" value="smtp.gmail.com" />
+    	<property name="port" value="587" />
+    	<property name="username" value="korea1parking2project3@gmail.com" />
+    	<property name="password" value="xnlafmyilhwvykyo" />
+    	<property name="javaMailProperties">
+        	<props>
+            	<prop key="mail.transport.protocol">smtp</prop>
+            	<prop key="mail.smtp.auth">true</prop>
+            	<prop key="mail.smtp.starttls.enable">true</prop>
+            	<prop key="mail.debug">true</prop>
+           		<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+        	</props>
+    	</property>
+	</bean>
+	
+	<!-- 파일 업로드 빈 -->
+	
+	<!-- MultipartResolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"/>
+		
+		<!-- 최대 업로드 용량 약10mb로 지정-->
+		<property name="maxUploadSize" value="1048576"/>
+	</bean>
+
+	<!-- 네이버 로그인 -->
+	
+	
+	<!-- mybatis - mapper 어노테이션 인식 -->
+	<mybatis-spring:scan base-package="com.project.mapper"/>
+		
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!--
+	수동 생성 방법 >> 사용하지 않음
+	이유 : sqlSessionBean을 만들지 않음 ! >> context-2-mybatis.xml 세션부분 주석처리 
+	 <bean id="dept_dao" class="dao.DeptDAO">
+		<property name="sqlSession" ref="sqlSessionBean"/>
+	</bean>
+ -->
+</beans>
