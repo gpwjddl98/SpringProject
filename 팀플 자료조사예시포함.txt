@@ -1,0 +1,566 @@
+게시판
+회원가입, 로그인, 아이디찾기, 비밀번호찾기
+api...
+
+--시퀀스
+CREATE SEQUENCE SEQ_PARKING_IDX;
+create sequence seq_notice;
+
+--후기게시판 시퀀스
+create sequence seq_reviewB;
+-- 자유게시판 시퀀스
+create sequence seq_freeboard;
+-- 후기댓글 시퀀스
+create sequence seq_reviewb_reply;
+--시퀀스
+create sequence seq_free_reply;
+
+
+--공지사항
+create table NOTICE(
+	idx number primary key,
+	title varchar2(255),
+	content varchar2(2000),
+	regdate varchar2(10),
+	viewcount number default 0 
+);
+
+INSERT INTO NOTICE VALUES(
+	SEQ_NOTICE.NEXTVAL,
+	'게시판 이용공지',
+	'자유게시판은 자유로운 주제로 글을 적을 수 있는 게시판입니다.
+함께 이용하는 이용자들을 위하여 몇 가지 수칙만 지켜주시기 바랍니다.
+수칙에 위배되는 게시글은 예고 없이 블라인드 및 삭제 될 수 있으며,
+제재制裁가 누적되는 경우 탈퇴 처리될 수 있습니다.
+
+1. 명예훼손, 욕설, 비속어 사용, 비방 게시글
+2. 음란성, 혐오성 게시글
+3. 상업성, 광고성 게시글
+4. 도배성, 장난성, 운영 방해성 게시글
+5. 저작권에 위반 되는 게시글
+6. 근거 없는 유언비어 및 사회적으로 문제의 소지가 있는 글
+7. 해당 단체의 목적에 크게 벗어나거나 해당 게시판의 성격에 부합되지 않는 글',
+	sysdate,
+	0
+);
+
+INSERT INTO NOTICE VALUES(
+	SEQ_NOTICE.NEXTVAL,
+	'공영주차장 정보',
+	'강남 주차장 알리미
+	주차장 정보는 서울 열린데이터 광장의 실제 데이터 바탕으로 보여줍니다.',
+	sysdate,
+	0
+);
+CREATE TABLE USERINFO(
+	USERID VARCHAR2(100) PRIMARY KEY,
+	USERPWD VARCHAR2(100) NOT NULL,
+	USERNAME VARCHAR2(100) NOT NULL,
+	USERPHONE1 VARCHAR2(50) NOT NULL,
+	USERPHONE2 VARCHAR2(50) NOT NULL,
+	USERPHONE3 VARCHAR2(50) NOT NULL,
+	USERNICK VARCHAR2(100) NOT NULL,
+	USERPHOTONAME VARCHAR2(100),
+	USEREMAIL VARCHAR2(200) NOT NULL	
+);
+
+
+
+--주차장 테이블
+CREATE TABLE PARKING(
+	ParkingId NUMBER(10) PRIMARY KEY,
+	ParkingIdx VARCHAR2(255),
+	ParkingName VARCHAR2(255) NOT NULL,
+	ParkingAddr VARCHAR2(255) NOT NULL,
+	ParkingTel VARCHAR2(255),
+	ParkingCount NUMBER(38),
+	ParkingStartTimeWeekday VARCHAR2(255),
+	ParkingEndTimeWeekday VARCHAR2(255),
+	ParkingStartTimeWeekend VARCHAR2(255),
+	ParkingEndTimeWeekend VARCHAR2(255),
+	ParkingStartTimeHoliday VARCHAR2(255),
+	ParkingEndTimeHoliday VARCHAR2(255),
+	ParkingMonthlyPass VARCHAR2(255),
+	ParkingSatPay VARCHAR2(255),
+	ParkingHolidayPay VARCHAR2(255),
+	ParkingBaseCharge NUMBER(38),
+	ParkingBaseTime NUMBER(38),
+	ParkingPlusCharge NUMBER(38),
+	ParkingPlusTime NUMBER(38),
+	ParkingLat VARCHAR2(255),
+	ParkingLon VARCHAR2(255)
+);
+
+
+
+
+--후기게시판
+create table reviewB(
+	idx number primary key,
+	title varchar2(255),
+	content varchar2(2000),
+	userNick varchar2(50),
+	regdate varchar2(10),
+	star varchar2(255),
+	viewcount number default 0
+);
+
+--후기게시판댓글
+CREATE TABLE reviewb_reply(
+	reidx number,
+	idx number,
+	content varchar2(50),
+	regDate varchar2(10),
+	PRIMARY KEY(reidx, idx),
+	writer varchar2(50)
+);
+alter table reviewb_reply add foreign key (idx) references reviewB (idx);
+
+--자유게시판
+create table freeboard(
+	idx number primary key,
+	title varchar2(255),
+	content varchar2(2000),
+	id varchar2(100),
+	pwd varchar2(100),
+	regdate varchar2(10),
+	recomm number(3),
+	viewcount number default 0
+);
+
+--자유게시판 댓글
+create table free_reply(
+	reidx number,
+	idx number,
+	writer varchar2(50),
+	pwd varchar2(100),
+	content varchar2(50),
+	regDate varchar2(10),
+	PRIMARY KEY(reidx, idx)
+);
+--외래키설정 자유게시판 댓글
+alter table free_reply add foreign key (idx) references freeboard (idx);
+
+--자유게시판 예시
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목88',
+  '내용88',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목1586',
+  '내용157',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목178',
+  '내용188',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목148',
+  '내용148',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목167',
+  '내용1564',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목56',
+  '내용567',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목65',
+  '내용656',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목8',
+  '내용8',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목9',
+  '내용9',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목10',
+  '내용10',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목112',
+  '내용347',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목65',
+  '내용44',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목11',
+  '내용11',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목22',
+  '내용22',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목33',
+  '내용33',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목44',
+  '내용44',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목55',
+  '내용55',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목66',
+  '내용66',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목99',
+  '내용99',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목89',
+  '내용89',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목44464',
+  '내용354464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목233464',
+  '내용332464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목554464',
+  '내용4464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목7464',
+  '내용77464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목88464',
+  '내용88464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목22464',
+  '내용22464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목44464',
+  '내용44464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목1464',
+  '내용1464',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목686',
+  '내용6864',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목2375',
+  '내용3453575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목45375',
+  '내용231575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목232375',
+  '내용123575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목345375',
+  '내용53575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목53175',
+  '내용235375',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목23175',
+  '내용47537575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목12375',
+  '내용53575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목2375',
+  '내용232575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목23475',
+  '내용535575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목5375',
+  '내용5345575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목8675',
+  '내용786575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목545675',
+  '내용54654575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+insert into freeboard values(
+  seq_freeboard.nextval,
+  '제목685775',
+  '내용78575',
+  'gpwjdl98',
+  '1111',
+  sysdate,
+  0,
+  0
+  );
+
+--후기게시판 예시
+
